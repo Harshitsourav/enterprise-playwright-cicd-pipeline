@@ -1,5 +1,5 @@
-import { Page, Locator } from '@playwright/test';
-import { BasePage } from './base.page';
+import { Page, Locator } from "@playwright/test";
+import { BasePage } from "./base.page";
 
 /**
  * Page Object for SauceDemo Checkout Flows (Step 1, Step 2, and Completion)
@@ -30,24 +30,28 @@ export class CheckoutPage extends BasePage {
     this.continueButton = page.locator('[data-test="continue"]');
     this.errorMessage = page.locator('[data-test="error"]');
 
-    this.summarySubtotal = page.locator('.summary_subtotal_label');
-    this.summaryTax = page.locator('.summary_tax_label');
-    this.summaryTotal = page.locator('.summary_total_label');
+    this.summarySubtotal = page.locator(".summary_subtotal_label");
+    this.summaryTax = page.locator(".summary_tax_label");
+    this.summaryTotal = page.locator(".summary_total_label");
     this.finishButton = page.locator('[data-test="finish"]');
 
-    this.completeHeader = page.locator('.complete-header');
+    this.completeHeader = page.locator(".complete-header");
     this.backHomeButton = page.locator('[data-test="back-to-products"]');
   }
 
-  async fillInformation(firstName: string, lastName: string, postalCode: string): Promise<void> {
-    await this.fill(this.firstNameInput, firstName, 'First Name');
-    await this.fill(this.lastNameInput, lastName, 'Last Name');
-    await this.fill(this.postalCodeInput, postalCode, 'Postal Code');
-    await this.click(this.continueButton, 'Continue Button');
+  async fillInformation(
+    firstName: string,
+    lastName: string,
+    postalCode: string,
+  ): Promise<void> {
+    await this.fill(this.firstNameInput, firstName, "First Name");
+    await this.fill(this.lastNameInput, lastName, "Last Name");
+    await this.fill(this.postalCodeInput, postalCode, "Postal Code");
+    await this.click(this.continueButton, "Continue Button");
   }
 
   async finishCheckout(): Promise<void> {
-    await this.click(this.finishButton, 'Finish Button');
+    await this.click(this.finishButton, "Finish Button");
   }
 
   async getConfirmationMessage(): Promise<string> {

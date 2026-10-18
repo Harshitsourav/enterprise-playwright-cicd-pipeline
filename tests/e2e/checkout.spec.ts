@@ -1,8 +1,8 @@
-import { test, expect } from '../../src/fixtures/test.fixture';
-import { Products, CheckoutInfo } from '../../src/utils/test-data';
+import { test, expect } from "../../src/fixtures/test.fixture";
+import { Products, CheckoutInfo } from "../../src/utils/test-data";
 
-test.describe('End-to-End Checkout Suite', () => {
-  test('TC-CHK-01: Should complete a full purchase workflow successfully', async ({
+test.describe("End-to-End Checkout Suite", () => {
+  test("TC-CHK-01: Should complete a full purchase workflow successfully", async ({
     authenticatedUser,
     cartPage,
     checkoutPage,
@@ -22,7 +22,7 @@ test.describe('End-to-End Checkout Suite', () => {
     await checkoutPage.fillInformation(
       CheckoutInfo.validCustomer.firstName,
       CheckoutInfo.validCustomer.lastName,
-      CheckoutInfo.validCustomer.postalCode
+      CheckoutInfo.validCustomer.postalCode,
     );
 
     // 4. Step 2: Overview & Finish
@@ -31,10 +31,10 @@ test.describe('End-to-End Checkout Suite', () => {
 
     // 5. Assert confirmation
     const confirmation = await checkoutPage.getConfirmationMessage();
-    expect(confirmation).toBe('Thank you for your order!');
+    expect(confirmation).toBe("Thank you for your order!");
   });
 
-  test('TC-CHK-02: Should validate required postal code field', async ({
+  test("TC-CHK-02: Should validate required postal code field", async ({
     authenticatedUser,
     cartPage,
     checkoutPage,
@@ -48,10 +48,10 @@ test.describe('End-to-End Checkout Suite', () => {
     await checkoutPage.fillInformation(
       CheckoutInfo.missingPostal.firstName,
       CheckoutInfo.missingPostal.lastName,
-      CheckoutInfo.missingPostal.postalCode
+      CheckoutInfo.missingPostal.postalCode,
     );
 
     const errorMessage = await checkoutPage.getErrorMessage();
-    expect(errorMessage).toContain('Error: Postal Code is required');
+    expect(errorMessage).toContain("Error: Postal Code is required");
   });
 });

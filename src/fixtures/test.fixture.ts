@@ -1,9 +1,9 @@
-import { test as base, expect, Page } from '@playwright/test';
-import { LoginPage } from '../pages/login.page';
-import { InventoryPage } from '../pages/inventory.page';
-import { CartPage } from '../pages/cart.page';
-import { CheckoutPage } from '../pages/checkout.page';
-import { TestUsers } from '../utils/test-data';
+import { test as base, expect, Page } from "@playwright/test";
+import { LoginPage } from "../pages/login.page";
+import { InventoryPage } from "../pages/inventory.page";
+import { CartPage } from "../pages/cart.page";
+import { CheckoutPage } from "../pages/checkout.page";
+import { TestUsers } from "../utils/test-data";
 
 /**
  * Fixture Types definitions
@@ -45,9 +45,12 @@ export const test = base.extend<CustomFixtures>({
   authenticatedUser: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto();
-    await loginPage.login(TestUsers.standard.username, TestUsers.standard.password);
+    await loginPage.login(
+      TestUsers.standard.username,
+      TestUsers.standard.password,
+    );
     const inventoryPage = new InventoryPage(page);
-    await expect(inventoryPage.pageTitle).toHaveText('Products');
+    await expect(inventoryPage.pageTitle).toHaveText("Products");
     await use({ page, inventoryPage });
   },
 });

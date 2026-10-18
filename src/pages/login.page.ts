@@ -1,5 +1,5 @@
-import { Page, Locator } from '@playwright/test';
-import { BasePage } from './base.page';
+import { Page, Locator } from "@playwright/test";
+import { BasePage } from "./base.page";
 
 /**
  * Page Object for SauceDemo Login Page
@@ -19,13 +19,13 @@ export class LoginPage extends BasePage {
   }
 
   async goto(): Promise<void> {
-    await this.navigate('/');
+    await this.navigate("/");
   }
 
   async login(username: string, password: string): Promise<void> {
-    await this.fill(this.usernameInput, username, 'Username Input');
-    await this.fill(this.passwordInput, password, 'Password Input');
-    await this.click(this.loginButton, 'Login Button');
+    await this.fill(this.usernameInput, username, "Username Input");
+    await this.fill(this.passwordInput, password, "Password Input");
+    await this.click(this.loginButton, "Login Button");
   }
 
   async getErrorMessage(): Promise<string> {

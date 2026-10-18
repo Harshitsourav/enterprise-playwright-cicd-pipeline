@@ -8,7 +8,7 @@ export class Logger {
   }
 
   static info(message: string): void {
-    console.log(this.format('INFO', message));
+    console.log(this.format("INFO", message));
   }
 
   static step(stepNumber: number | string, message: string): void {
@@ -16,10 +16,10 @@ export class Logger {
   }
 
   static warn(message: string): void {
-    console.warn(this.format('WARN', message));
+    console.warn(this.format("WARN", message));
   }
 
   static error(message: string, error?: unknown): void {
-    console.error(this.format('ERROR', message), error || '');
+    console.error(this.format("ERROR", message), error || "");
   }
 }
