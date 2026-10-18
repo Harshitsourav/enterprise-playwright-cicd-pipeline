@@ -11,7 +11,9 @@
     "test:api": "playwright test tests/api",
     "test:e2e": "playwright test tests/e2e",
     "report": "playwright show-report",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf test-results playwright-report",
+    "clean:all": "rm -rf node_modules test-results playwright-report"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
