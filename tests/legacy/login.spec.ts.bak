@@ -1,0 +1,85 @@
+import { test, expect, Browser, Page, Locator } from "@playwright/test";
+import { webkit, chromium, firefox } from "@playwright/test";
+
+test("login", async () => {
+  const browser: Browser = await webkit.launch({ headless: true });
+  const page: Page = await browser.newPage();
+  await page.goto(
+    "https://naveenautomationlabs.com/opencart/index.php?route=account/login",
+  );
+  const email: Locator = await page.locator("#input-email");
+  const password: Locator = await page.locator("#input-password");
+  const loginButton: Locator = await page.locator("[value = 'Login']");
+
+  await email.fill("pwtest@popencart.com");
+  await password.fill("playwright@123");
+  await loginButton.click();
+
+  const title: String = await page.title();
+  console.log("Home Page Title: ", title);
+
+  await page.screenshot({ path: "homepage.png" });
+
+  expect(title).toEqual("Account Login");
+
+  await browser.close();
+});
+
+test("browser contex check", async () => {
+  // ------- Single Browser ---------
+  const browser: Browser = await chromium.launch();
+  // ------- Browser Context 1 ---------
+  const browser_context_1 = await browser.newContext();
+  const page_1: Page = await browser_context_1.newPage();
+
+  const email_1: Locator = await page_1.locator("#input-email");
+  const password_1: Locator = await page_1.locator("#input-password");
+  const loginButton_1: Locator = await page_1.locator("[value = 'Login']");
+
+  await page_1.goto(
+    "https://naveenautomationlabs.com/opencart/index.php?route=account/login",
+  );
+  await email_1.fill("pwtest@popencart.com");
+  await password_1.fill("playwright@123");
+  await loginButton_1.click();
+  const title: String = await page_1.title();
+  expect(title).toEqual("Account Login");
+  // ------- Browser Context 2 ---------
+  const browser_context_2 = await browser.newContext();
+  const page_2: Page = await browser_context_2.newPage();
+
+  await page_2.goto(
+    "https://naveenautomationlabs.com/opencart/index.php?route=account/login",
+  );
+
+  const email_2: Locator = await page_2.locator("#input-email");
+  const password_2: Locator = await page_2.locator("#input-password");
+  const loginButton_2: Locator = await page_2.locator("[value = 'Login']");
+
+  await email_2.fill("userpw@pw.com");
+  await password_2.fill("Test@123");
+  await loginButton_2.click();
+  const title_2: String = await page_2.title();
+  expect(title_2).toEqual("My Account");
+
+  await browser_context_1.close();
+  await browser_context_2.close();
+  await browser.close();
+});
+
+test("authentication pop-up", async () => {
+  const browser: Browser = await chromium.launch();
+  const page: Page = await browser.newPage();
+  const usernane: String = "admin";
+  const password: String = "admin";
+
+  const baseAuth = page.setExtraHTTPHeaders({
+    Authorization: createAuthHeader(usernane, password),
+  });
+
+  await page.goto("https://the-internet.herokuapp.com/basic_auth");
+});
+
+function createAuthHeader(username: String, password: String) {
+  return "Basic " + btoa(username + ":" + password);
+}
