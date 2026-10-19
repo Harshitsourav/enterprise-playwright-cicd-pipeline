@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: harshitsourav/playwright-tests:latest
+      image: harshit177sourav/playwright-tests:latest
       credentials:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
