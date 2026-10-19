@@ -9,4 +9,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run a script
-        run: echi "Hello, Github Actions!"
+        run: echo "Hello, Github Actions!"
