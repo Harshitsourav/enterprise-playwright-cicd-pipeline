@@ -8,6 +8,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # Run all shards even if one fails
+      matrix:
+        shardIndex: [1, 2] # 2 parallel virtual machines
+        shardTotal: [2]
     steps:
       # Step 1: Clone your repository into the VM
       - name: Checkout repository
@@ -43,14 +48,14 @@ jobs:
         run: npx playwright install-deps
 
       # Step 5: Execute tests
-      - name: Run Playwright Tests
-        run: npx playwright test
+      - name: Run Playwright Tests (Shard ${{ matrix.shardIndex}}/${{shardTotal}})
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       # Step 6: Upload the HTML Report & Traces (Runs even if Step 5 failed!)
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
         if: always() # <-- Crucial! Runs on success AND failure
         with:
-          name: playwright-test-report
+          name: playwright-report-shard-${{ matrix.shardIndex }}
           path: playwright-report/
           retention-days: 14
