@@ -26,3 +26,11 @@ jobs:
       # Step 5: Execute tests
       - name: Run Playwright Tests
         run: npx playwright test
+      # Step 6: Upload the HTML Report & Traces (Runs even if Step 5 failed!)
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always() # <-- Crucial! Runs on success AND failure
+        with:
+          name: playwright-test-report
+          path: playwright-report/
+          retention-days: 14
