@@ -12,20 +12,40 @@ jobs:
       # Step 1: Clone your repository into the VM
       - name: Checkout repository
         uses: actions/checkout@v4
+
       # Step 2: Install Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 26
+          cache: "npm"
+
       # Step 3: Install exact dependencies deterministically
       - name: Install dependencies
         run: npm ci
-      # Step 4: Install browsers + Linux OS dependencies
+
+      # Step 3a: Check if browsers are already cached from a previous run
+      - name: Cache Playwright Browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+
+      # Step 3b: ONLY install browsers if there was a CACHE MISS
       - name: Install Playwright Browsers and OS Deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: npx playwright install --with-deps
+
+      # Step 3c: If cache hit, we ONLY need the OS system libraries
+      - name: Install Playwright OS Deps Only
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps
+
       # Step 5: Execute tests
       - name: Run Playwright Tests
         run: npx playwright test
+
       # Step 6: Upload the HTML Report & Traces (Runs even if Step 5 failed!)
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
