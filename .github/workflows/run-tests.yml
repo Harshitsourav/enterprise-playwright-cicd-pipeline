@@ -49,13 +49,41 @@ jobs:
 
       # Step 5: Execute tests
       - name: Run Playwright Tests (Shard ${{ matrix.shardIndex}}/${{matrix.shardTotal}})
-        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}  --reporter=blob
 
-      # Step 6: Upload the HTML Report & Traces (Runs even if Step 5 failed!)
-      - name: Upload Playwright Report
+      # Upload blob artifact:
+      - name: Upload Blob Report
         uses: actions/upload-artifact@v4
-        if: always() # <-- Crucial! Runs on success AND failure
+        if: always()
         with:
-          name: playwright-report-shard-${{ matrix.shardIndex }}
+          name: blob-report-${{ matrix.shardIndex }}
+          path: blob-report/
+          retention-days: 1
+  merge-reports:
+    needs: [test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+      - name: Install dependencies
+        run: npm ci
+      - name: Download all Blob Reports
+        uses: actions/download-artifact@v4
+        with:
+          path: all-blob-reports
+          pattern: blob-report-*
+          merge-multiple: true
+      - name: Merge Reports into Unified HTML
+        run: npx playwright merge-reports --reporter=html all-blob-reports
+      - name: Upload Final Unified HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-playwright-report
           path: playwright-report/
           retention-days: 14
