@@ -12,6 +12,9 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.64.1-jammy
 
+    env:
+      HOME: /root
+
     # env:
     #   BASE_URL: "https://www.saucedemo.com"
     #   STAGING_USERNAME: ${{ secrets.STAGING_USERNAME }}
